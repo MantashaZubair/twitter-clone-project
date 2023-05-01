@@ -2,9 +2,10 @@ const userModels = require("../models/userModels")
 const tweetModel = require("../models/tweetModel")
 const { hashPassword } = require("../helpers/authHelper")
 const JWT = require("jsonwebtoken")
+const getDataUri = require("../utils/dataUri")
+const cloudnary =require("cloudinary")
 
 //get user with userid
-
 const getUserController = async(req,res)=>{
 try {
     const user = await userModels.findById(req.params.id)
@@ -29,7 +30,6 @@ try {
 
 
 ///get all users
-
 const getAllUserController = async(req,res)=>{
 try {
   const user =  await userModels.find()
@@ -81,10 +81,70 @@ try {
     }) 
 }
 }
+ 
+//update profileimage
+const updateProfileImageController = async(req,res)=>{
+  try {
+    
+    const users = await userModels.findById(req.user._id);
+    const file = req.file;
+    const fileUri=getDataUri(file)
+    const mycloud = await cloudnary.v2.uploader.upload(fileUri.content)
+
+    const user = await userModels.findByIdAndUpdate(req.user._id,{
+     profilePicture:mycloud.secure_url|| users.profilePicture,
+    },{new:true})
+    const token = await JWT.sign({_id:user._id}, process.env.JWT_SECRET,{expiresIn:"7d"})
+    res.status(200).json({
+        success:true,
+        message:"profile updated Successfully",
+        user,
+        token
+    })
+
+} catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success:false,
+      message:"Some thing went wrong while updating user",
+      error
+    }) 
+}
+}
 
 
+//upload coverPicture
+const updateCoverImageController =async(req,res)=>{
+  try {
+    
+    const users = await userModels.findById(req.user._id);
+    const file = req.file;
+    const fileUri=getDataUri(file)
+    const mycloud = await cloudnary.v2.uploader.upload(fileUri.content)
+
+    const user = await userModels.findByIdAndUpdate(req.user._id,{
+      coverPicture:mycloud.secure_url|| users.coverPicture,
+    },{new:true})
+    const token = await JWT.sign({_id:user._id}, process.env.JWT_SECRET,{expiresIn:"7d"})
+    res.status(200).json({
+        success:true,
+        message:"profile updated Successfully",
+        user,
+        token
+    })
+
+} catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success:false,
+      message:"Some thing went wrong while updating user",
+      error
+    }) 
+}
+}
 
 
+//delete user
 const deleteUserController = async(req,res)=>{
   try { 
     await userModels.findByIdAndDelete(req.params.id);
@@ -162,6 +222,8 @@ module.exports = {
   getUserController,
   getAllUserController,
   updateProfileController,
+  updateCoverImageController,
+  updateProfileImageController,
   deleteUserController,
   followUserController,
   unfollowUserController,
