@@ -1,0 +1,71 @@
+.container {
+    overflow: hidden;
+  }
+  
+  .sidebar {
+    padding: 20px;
+    position: fixed;
+    height: 100%; /* Ensure the sidebar takes full height */
+    top: 0;
+    left: 0;
+    width: 250px; /* Define the width of the sidebar */
+    /* background-color: #f5f5f5; Background color for better visibility */
+    transform: translateX(40%); /* Hide the sidebar initially */
+    transition: transform 0.3s ease-in-out;
+    z-index: 9998;
+  }
+  
+  .sidebar.active {
+    transform: translateX(0); /* Bring the sidebar into view */
+  }
+  
+  .toggle-button {
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+   width: auto;
+    z-index: 10000;
+    background-color: #1e88e5;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .toggle-button:hover {
+    background-color: #1565c0; /* Darker blue on hover */
+  }
+ 
+  @media (max-width: 991px) {
+    .sidebar {
+      width: 100%; /* Full width sidebar for mobile */
+      /* height: 100%; Full height on mobile */
+      transform: translateX(-100%); /* Initially hidden */
+      background-color: #f5f5f5;
+    }
+  
+    .sidebar.active {
+      transform: translateX(0); /* Show sidebar when active */
+    }
+  
+    .toggle-button {
+    display: block;
+      top: 10px;
+      z-index: 10001;
+    }
+  }
+  @media (min-width:992px ){
+    .sidebar {
+        transform: translateX(20%); /* Initially hidden */
+     
+    } 
+  }
+  @media (min-width:1200px ){
+    .sidebar {
+        transform: translateX(40%);; /* Initially hidden */
+     
+    } 
+  }
+  

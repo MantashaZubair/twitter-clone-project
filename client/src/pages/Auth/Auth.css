@@ -1,0 +1,27 @@
+.card-login{
+    border-radius:1rem;
+     margin-top: 140px;
+}
+form{
+    padding: 5px 20px;
+}
+form input{
+    border:none;
+    border-bottom: 1px solid #000;
+    border-radius: 0;
+    padding: 2px;
+}
+ form input:focus,  form input:active{
+    box-shadow: none !important;
+ 
+ }
+ .button:disabled{
+    background: silver;
+    pointer-events: none;
+ }
+ @media only screen and (max-width:600px) {
+    .card-login{
+        border: none !important;
+         margin-top: 40px;
+    }
+}
